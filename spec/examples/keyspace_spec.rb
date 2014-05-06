@@ -78,7 +78,7 @@ CQL
     it 'should log queries with bind variables resolved' do
       connection.stub(:execute).with("SELECT ? FROM posts", [:id, :title]).and_return result_stub
       cequel[:posts].select(:id, :title).to_a
-      io.string.should =~ /CQL \(\d+ms\) SELECT 'id','title' FROM posts/
+      io.string.should =~ /CQL \(\d+ms\) SELECT id,title FROM posts/
     end
   end
 end
