@@ -11,10 +11,10 @@ describe Cequel::Model::Dictionary do
   describe '#save' do
     before do
       connection.stub(:execute).
-        with('SELECT FIRST 2 * FROM blog_posts WHERE ? = ? LIMIT 1', :blog_id, 1).
+        with('SELECT FIRST 2 * FROM blog_posts WHERE blog_id = ? LIMIT 1', 1).
         and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
       connection.stub(:execute).
-        with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid2, '', :blog_id, 1).
+        with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid2, '', 1).
         and_return result_stub('blog_id' => 1)
     end
 
@@ -22,7 +22,7 @@ describe Cequel::Model::Dictionary do
       dictionary[uuid1] = 1
       dictionary[uuid2] = 2
       connection.should_receive(:execute).
-        with('UPDATE blog_posts SET ? = ?, ? = ? WHERE ? = ?', uuid1, 1, uuid2, 2, :blog_id, 1)
+        with('UPDATE blog_posts SET ? = ?, ? = ? WHERE blog_id = ?', uuid1, 1, uuid2, 2, 1)
       dictionary.save
     end
 
@@ -30,7 +30,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid1] = 2
       connection.should_receive(:execute).
-        with('UPDATE blog_posts SET ? = ? WHERE ? = ?', uuid1, 2, :blog_id, 1)
+        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid1, 2, 1)
       dictionary.save
     end
 
@@ -38,7 +38,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid3] = 3
       connection.should_receive(:execute).
-        with('UPDATE blog_posts SET ? = ? WHERE ? = ?', uuid3, 3, :blog_id, 1)
+        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid3, 3, 1)
       dictionary.save
     end
 
@@ -46,7 +46,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid1] = nil
       connection.should_receive(:execute).
-        with('DELETE ? FROM blog_posts WHERE ? = ?', [uuid1], :blog_id, 1)
+        with('DELETE ? FROM blog_posts WHERE blog_id = ?', [uuid1], 1)
       dictionary.save
     end
 
@@ -55,7 +55,7 @@ describe Cequel::Model::Dictionary do
       dictionary[uuid1] = 1
       dictionary[uuid1] = nil
       connection.should_receive(:execute).once.
-        with('DELETE ? FROM blog_posts WHERE ? = ?', [uuid1], :blog_id, 1)
+        with('DELETE ? FROM blog_posts WHERE blog_id = ?', [uuid1], 1)
       dictionary.save
     end
 
@@ -64,7 +64,7 @@ describe Cequel::Model::Dictionary do
       dictionary[uuid1] = nil
       dictionary[uuid1] = 1
       connection.should_receive(:execute).once.
-        with('UPDATE blog_posts SET ? = ? WHERE ? = ?', uuid1, 1, :blog_id, 1)
+        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid1, 1, 1)
       dictionary.save
     end
 
@@ -72,7 +72,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid3] = 3
       connection.should_receive(:execute).once.
-        with('UPDATE blog_posts SET ? = ? WHERE ? = ?', uuid3, 3, :blog_id, 1)
+        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid3, 3, 1)
       2.times { dictionary.save }
     end
 
@@ -80,7 +80,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid1] = nil
       connection.should_receive(:execute).once.
-        with('DELETE ? FROM blog_posts WHERE ? = ?', [uuid1], :blog_id, 1)
+        with('DELETE ? FROM blog_posts WHERE blog_id = ?', [uuid1], 1)
       2.times { dictionary.save }
     end
 
@@ -89,15 +89,15 @@ describe Cequel::Model::Dictionary do
   describe '#destroy' do
     before do
       connection.stub(:execute).
-        with('SELECT FIRST 2 * FROM blog_posts WHERE ? = ? LIMIT 1', :blog_id, 1).
+        with('SELECT FIRST 2 * FROM blog_posts WHERE blog_id = ? LIMIT 1', 1).
         and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
       connection.stub(:execute).
-        with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid2, '', :blog_id, 1).
+        with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid2, '', 1).
         and_return result_stub({'blog_id' => 1})
 
       dictionary.load
       connection.should_receive(:execute).
-        with('DELETE FROM blog_posts WHERE ? = ?', :blog_id, 1)
+        with('DELETE FROM blog_posts WHERE blog_id = ?', 1)
     end
 
     it 'should delete row from cassandra' do
@@ -107,7 +107,7 @@ describe Cequel::Model::Dictionary do
     it 'should remove all properties from memory' do
       dictionary.destroy
       connection.stub(:execute).
-        with('SELECT ? FROM blog_posts WHERE ? = ? LIMIT 1', [uuid1], :blog_id, 1).
+        with('SELECT ? FROM blog_posts WHERE blog_id = ? LIMIT 1', [uuid1], 1).
         and_return result_stub({})
       dictionary[uuid1].should be_nil
     end
@@ -139,13 +139,13 @@ describe Cequel::Model::Dictionary do
     describe '#each_pair' do
       it 'should override persisted data with unsaved changes' do
         connection.stub(:execute).
-          with('SELECT FIRST 2 * FROM blog_posts WHERE ? = ? LIMIT 1', :blog_id, 1).
+          with('SELECT FIRST 2 * FROM blog_posts WHERE blog_id = ? LIMIT 1', 1).
           and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
         connection.stub(:execute).
-          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid2, '', :blog_id, 1).
+          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid2, '', 1).
           and_return result_stub('blog_id' => 1, uuid2 => 2, uuid3 => 3)
         connection.stub(:execute).
-          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid3, '', :blog_id, 1).
+          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid3, '', 1).
           and_return result_stub({'blog_id' => 1})
         hash = {}
         dictionary.each_pair do |key, value|
@@ -172,7 +172,7 @@ describe Cequel::Model::Dictionary do
     describe '#slice' do
       it 'should override loaded slice with unsaved data in memory' do
         connection.stub(:execute).
-          with('SELECT ? FROM blog_posts WHERE ? = ? LIMIT 1', [uuid1,uuid2,uuid3,uuid4], :blog_id, 1).
+          with('SELECT ? FROM blog_posts WHERE blog_id = ? LIMIT 1', [uuid1,uuid2,uuid3,uuid4], 1).
           and_return result_stub(uuid1 => 1, uuid2 => 2, uuid3 => 3)
         dictionary.slice(uuid1, uuid2, uuid3, uuid4).should ==
           {uuid1 => -1, uuid2 => 2, uuid4 => 4}
@@ -182,13 +182,13 @@ describe Cequel::Model::Dictionary do
     describe '#keys' do
       it 'should override keys that have been added or removed' do
         connection.should_receive(:execute).
-          with('SELECT FIRST 2 * FROM blog_posts WHERE ? = ? LIMIT 1', :blog_id, 1).
+          with('SELECT FIRST 2 * FROM blog_posts WHERE blog_id = ? LIMIT 1', 1).
           and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
         connection.should_receive(:execute).
-          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid2, '', :blog_id, 1).
+          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid2, '', 1).
           and_return result_stub('blog_id' => 1, uuid2 => 2, uuid3 => 3)
         connection.should_receive(:execute).
-          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid3, '', :blog_id, 1).
+          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid3, '', 1).
           and_return result_stub({'blog_id' => 1})
         dictionary.keys.should == [uuid1, uuid2, uuid4]
       end
@@ -197,13 +197,13 @@ describe Cequel::Model::Dictionary do
     describe '#values' do
       it 'should override values that have been added or removed' do
         connection.should_receive(:execute).
-          with('SELECT FIRST 2 * FROM blog_posts WHERE ? = ? LIMIT 1', :blog_id, 1).
+          with('SELECT FIRST 2 * FROM blog_posts WHERE blog_id = ? LIMIT 1', 1).
           and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
         connection.should_receive(:execute).
-          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid2, '', :blog_id, 1).
+          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid2, '', 1).
           and_return result_stub('blog_id' => 1, uuid2 => 2, uuid3 => 3)
         connection.should_receive(:execute).
-          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE ? = ? LIMIT 1', uuid3, '', :blog_id, 1).
+          with('SELECT FIRST 2 ?..? FROM blog_posts WHERE blog_id = ? LIMIT 1', uuid3, '', 1).
           and_return result_stub({'blog_id' => 1})
         dictionary.values.should == [-1, 2, 4]
       end
@@ -219,8 +219,8 @@ describe Cequel::Model::Dictionary do
         dictionary[4] = comment
         connection.should_receive(:execute).
           with(
-            'UPDATE post_comments SET ? = ? WHERE ? = ?',
-            4, comment.to_json, :post_id, 1
+            'UPDATE post_comments SET ? = ? WHERE post_id = ?',
+            4, comment.to_json, 1
           )
         dictionary.save
       end
@@ -229,8 +229,8 @@ describe Cequel::Model::Dictionary do
     describe '#[]' do
       it 'should return deserialized data' do
         connection.stub(:execute).with(
-            'SELECT ? FROM post_comments WHERE ? = ? LIMIT 1',
-            [4], :post_id, 1
+            'SELECT ? FROM post_comments WHERE post_id = ? LIMIT 1',
+            [4], 1
         ).and_return result_stub(4 => comment.to_json)
         dictionary[4].should == comment
       end
@@ -239,8 +239,8 @@ describe Cequel::Model::Dictionary do
     describe '#slice' do
       it 'should return deserialized values' do
         connection.stub(:execute).with(
-          'SELECT ? FROM post_comments WHERE ? = ? LIMIT 1',
-          [4, 5], :post_id, 1
+          'SELECT ? FROM post_comments WHERE post_id = ? LIMIT 1',
+          [4, 5], 1
         ).and_return result_stub(4 => comment.to_json)
         dictionary.slice(4, 5).should == {4 => comment}
       end
@@ -249,8 +249,8 @@ describe Cequel::Model::Dictionary do
     describe '#load' do
       it 'should retain deserialized values in memory' do
         connection.stub(:execute).with(
-          'SELECT FIRST 1000 * FROM post_comments WHERE ? = ? LIMIT 1',
-          :post_id, 1
+          'SELECT FIRST 1000 * FROM post_comments WHERE post_id = ? LIMIT 1',
+          1
         ).and_return result_stub(4 => comment.to_json)
         dictionary.load
         connection.should_not_receive(:execute)
@@ -259,8 +259,8 @@ describe Cequel::Model::Dictionary do
 
       it 'should be a no-op if already loaded' do
         connection.stub(:execute).with(
-          'SELECT FIRST 1000 * FROM post_comments WHERE ? = ? LIMIT 1',
-          :post_id, 1
+          'SELECT FIRST 1000 * FROM post_comments WHERE post_id = ? LIMIT 1',
+          1
         ).and_return result_stub(4 => comment.to_json)
         dictionary.load
         connection.should_not_receive(:execute)
@@ -273,8 +273,8 @@ describe Cequel::Model::Dictionary do
       it 'should yield deserialized values' do
         connection.stub(:execute).
           with(
-            'SELECT FIRST 1000 * FROM post_comments WHERE ? = ? LIMIT 1',
-            :post_id, 1
+            'SELECT FIRST 1000 * FROM post_comments WHERE post_id = ? LIMIT 1',
+            1
           ).and_return result_stub('post_id' => 1, 4 => comment.to_json)
         dictionary.each_pair.map { |column, comment| comment }.first.
           should == comment
@@ -285,8 +285,8 @@ describe Cequel::Model::Dictionary do
       it 'should return deserialized values' do
         connection.stub(:execute).
           with(
-            'SELECT FIRST 1000 * FROM post_comments WHERE ? = ? LIMIT 1',
-            :post_id, 1
+            'SELECT FIRST 1000 * FROM post_comments WHERE post_id = ? LIMIT 1',
+            1
           ).and_return result_stub('post_id' => 1, 4 => comment.to_json)
         dictionary.values.should == [comment]
       end

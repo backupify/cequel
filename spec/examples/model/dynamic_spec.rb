@@ -24,7 +24,7 @@ describe Cequel::Model::Dynamic do
     category[:tag] = 'big-data'
     category[:color] = 'blue'
     connection.should_receive(:execute).
-      with "UPDATE categories SET ? = ?, ? = ? WHERE ? = ?", 'tag', 'big-data', 'color', 'blue', :id, 1
+      with "UPDATE categories SET ? = ?, ? = ? WHERE id = ?", 'tag', 'big-data', 'color', 'blue', 1
     category.save
   end
 
@@ -35,7 +35,7 @@ describe Cequel::Model::Dynamic do
     category.save
     category[:tag] = nil
     connection.should_receive(:execute).
-      with "DELETE ? FROM categories WHERE ? = ?", ['tag'], :id, 1
+      with "DELETE ? FROM categories WHERE id = ?", ['tag'], 1
     category.save
   end
 end

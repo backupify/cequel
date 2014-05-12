@@ -10,13 +10,13 @@ shared_examples 'readable dictionary' do
 
       it 'should load columns in batches and yield them' do
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 * FROM #{cf} WHERE ? = ? LIMIT 1", :blog_id, 1).
+          with("SELECT FIRST 2 * FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid2, '', :blog_id, 1).
+          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid2, '', 1).
           and_return result_stub('blog_id' => 1, uuid2 => 2, uuid3 => 3)
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid3, '', :blog_id, 1).
+          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid3, '', 1).
           and_return result_stub({'blog_id' => 1})
         hash = {}
         dictionary.each_pair do |key, value|
@@ -31,7 +31,7 @@ shared_examples 'readable dictionary' do
 
       it 'should load column from cassandra' do
         connection.stub(:execute).
-          with("SELECT ? FROM #{cf} WHERE ? = ? LIMIT 1", [uuid1], :blog_id, 1).
+          with("SELECT ? FROM #{cf} WHERE blog_id = ? LIMIT 1", [uuid1], 1).
           and_return result_stub(uuid1 => 1)
         dictionary[uuid1].should == 1
       end
@@ -41,7 +41,7 @@ shared_examples 'readable dictionary' do
     describe '#slice' do
       it 'should load columns from data store' do
         connection.stub(:execute).
-          with("SELECT ? FROM #{cf} WHERE ? = ? LIMIT 1", [uuid1,uuid2], :blog_id, 1).
+          with("SELECT ? FROM #{cf} WHERE blog_id = ? LIMIT 1", [uuid1,uuid2], 1).
           and_return result_stub(uuid1 => 1, uuid2 => 2)
         dictionary.slice(uuid1, uuid2).should == {uuid1 => 1, uuid2 => 2}
       end
@@ -50,13 +50,13 @@ shared_examples 'readable dictionary' do
     describe '#keys' do
       it 'should load keys from data store' do
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 * FROM #{cf} WHERE ? = ? LIMIT 1", :blog_id, 1).
+          with("SELECT FIRST 2 * FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid2, '', :blog_id, 1).
+          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid2, '', 1).
           and_return result_stub('blog_id' => 1, uuid2 => 2, uuid3 => 3)
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid3, '', :blog_id, 1).
+          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid3, '',1).
           and_return result_stub({'blog_id' => 1})
         dictionary.keys.should == [uuid1, uuid2, uuid3]
       end
@@ -65,13 +65,13 @@ shared_examples 'readable dictionary' do
     describe '#values' do
       it 'should load values from data store' do
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 * FROM #{cf} WHERE ? = ? LIMIT 1", :blog_id, 1).
+          with("SELECT FIRST 2 * FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid2, '', :blog_id, 1).
+          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid2, '', 1).
           and_return result_stub('blog_id' => 1, uuid2 => 2, uuid3 => 3)
         connection.should_receive(:execute).
-          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid3, '', :blog_id, 1).
+          with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid3, '', 1).
           and_return result_stub({'blog_id' => 1})
         dictionary.values.should == [1, 2, 3]
       end
@@ -80,7 +80,7 @@ shared_examples 'readable dictionary' do
     describe '#first' do
       it 'should load value from data store' do
         connection.should_receive(:execute).
-          with("SELECT FIRST 1 * FROM #{cf} WHERE ? = ? LIMIT 1", :blog_id, 1).
+          with("SELECT FIRST 1 * FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub('blog_id' => 1, uuid1 => 1)
         dictionary.first.should == [uuid1, 1]
       end
@@ -89,7 +89,7 @@ shared_examples 'readable dictionary' do
     describe '#last' do
       it 'should load value from data store' do
         connection.should_receive(:execute).
-          with("SELECT FIRST 1 REVERSED * FROM #{cf} WHERE ? = ? LIMIT 1", :blog_id, 1).
+          with("SELECT FIRST 1 REVERSED * FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub('blog_id' => 1, uuid3 => 3)
         dictionary.last.should == [uuid3, 3]
       end
@@ -100,13 +100,13 @@ shared_examples 'readable dictionary' do
   context 'with data loaded in memory' do
     before do
       connection.stub(:execute).
-        with("SELECT FIRST 2 * FROM #{cf} WHERE ? = ? LIMIT 1", :blog_id, 1).
+        with("SELECT FIRST 2 * FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
         and_return result_stub('blog_id' => 1, uuid1 => 1, uuid2 => 2)
       connection.stub(:execute).
-        with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid2, '', :blog_id, 1).
+        with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid2, '', 1).
         and_return result_stub('blog_id' => 1, uuid2 => 2, uuid3 => 3)
       connection.stub(:execute).
-        with("SELECT FIRST 2 ?..? FROM #{cf} WHERE ? = ? LIMIT 1", uuid3, '', :blog_id, 1).
+        with("SELECT FIRST 2 ?..? FROM #{cf} WHERE blog_id = ? LIMIT 1", uuid3, '', 1).
         and_return result_stub({'blog_id' => 1})
       dictionary.load
       connection.should_not_receive(:execute)
@@ -170,8 +170,7 @@ shared_examples 'readable dictionary' do
     it 'should load all rows in one query' do
       connection.stub(:execute).
         with(
-          'SELECT * FROM post_comments WHERE ? IN (?)',
-          'post_id', [1, 2]
+          'SELECT * FROM post_comments WHERE post_id IN (?)', [1, 2]
         ).and_return result_stub(
           *comments.each_with_index.
             map { |comment, i| {'post_id' => i+1, i+4 => comment.to_json} }

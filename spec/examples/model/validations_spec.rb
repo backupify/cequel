@@ -42,14 +42,14 @@ describe Cequel::Model::Validations do
 
   describe '#update_attributes!' do
     let(:post) do
-      connection.stub(:execute).with("SELECT * FROM posts WHERE ? = ? LIMIT 1", :id, 1).
+      connection.stub(:execute).with("SELECT * FROM posts WHERE id = ? LIMIT 1", 1).
         and_return result_stub(:id => 1, :blog_id => 1, :title => 'Cequel')
       Post.find(1)
     end
 
     it 'should change attributes and save them if valid' do
       connection.should_receive(:execute).
-        with "UPDATE posts SET ? = ? WHERE ? = ?", 'body', 'Cequel cequel', :id, 1
+        with "UPDATE posts SET ? = ? WHERE id = ?", 'body', 'Cequel cequel', 1
       post.update_attributes!(:body => 'Cequel cequel')
     end
 

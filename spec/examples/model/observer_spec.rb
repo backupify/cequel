@@ -8,7 +8,7 @@ describe Cequel::Model::Observer do
 
   let(:post) do
     connection.stub(:execute).
-      with("SELECT * FROM posts WHERE ? = ? LIMIT 1", :id, 1).
+      with("SELECT * FROM posts WHERE id = ? LIMIT 1", 1).
       and_return result_stub('id' => 1, 'title' => 'Hey')
     Post.find(1)
   end
@@ -59,7 +59,7 @@ describe Cequel::Model::Observer do
 
     before do
       connection.stub(:execute).
-        with "DELETE FROM posts WHERE ? = ?", :id, 1
+        with "DELETE FROM posts WHERE id = ?", 1
 
       post.destroy
     end

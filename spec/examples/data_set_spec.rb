@@ -95,7 +95,7 @@ describe Cequel::DataSet do
 
     it 'should send update statement scoped to current row specifications' do
       connection.should_receive(:execute).
-        with "UPDATE posts SET ? = ? WHERE ? = ?", :title, 'Fun', :id, 4
+        with "UPDATE posts SET ? = ? WHERE id = ?", :title, 'Fun', 4
 
       cequel[:posts].where(:id => 4).update(:title => 'Fun')
     end
@@ -114,10 +114,10 @@ describe Cequel::DataSet do
   describe '#increment' do
     it 'should increment counter columns' do
       connection.should_receive(:execute).with(
-        'UPDATE comment_counts SET ? = ? + ?, ? = ? + ? WHERE ? = ?',
+        'UPDATE comment_counts SET ? = ? + ?, ? = ? + ? WHERE blog_id = ?',
         'somepost', 'somepost', 1,
         'anotherpost', 'anotherpost', 2,
-        'blog_id', 'myblog'
+        'myblog'
       )
       cequel[:comment_counts].where('blog_id' => 'myblog').
         increment('somepost' => 1, 'anotherpost' => 2)
@@ -127,10 +127,10 @@ describe Cequel::DataSet do
   describe '#decrement' do
     it 'should decrement counter columns' do
       connection.should_receive(:execute).with(
-        'UPDATE comment_counts SET ? = ? - ?, ? = ? - ? WHERE ? = ?',
+        'UPDATE comment_counts SET ? = ? - ?, ? = ? - ? WHERE blog_id = ?',
         'somepost', 'somepost', 1,
         'anotherpost', 'anotherpost', 2,
-        'blog_id', 'myblog'
+        'myblog'
       )
       cequel[:comment_counts].where('blog_id' => 'myblog').
         decrement('somepost' => 1, 'anotherpost' => 2)
@@ -175,7 +175,7 @@ describe Cequel::DataSet do
 
     it 'should send delete statement with scoped row specifications' do
       connection.should_receive(:execute).
-        with "DELETE FROM posts WHERE ? = ?", :id, 4
+        with "DELETE FROM posts WHERE id = ?", 4
 
       cequel[:posts].where(:id => 4).delete
     end
@@ -262,22 +262,22 @@ describe Cequel::DataSet do
   describe '#where' do
     it 'should build WHERE statement from hash' do
       cequel[:posts].where(:title => 'Hey').cql.
-        should == ["SELECT * FROM posts WHERE ? = ?", :title, 'Hey']
+        should == ["SELECT * FROM posts WHERE title = ?", 'Hey']
     end
 
     it 'should build WHERE statement from multi-element hash' do
       cequel[:posts].where(:title => 'Hey', :body => 'Guy').cql.
-        should == ["SELECT * FROM posts WHERE ? = ? AND ? = ?", :title, 'Hey', :body, 'Guy']
+        should == ["SELECT * FROM posts WHERE title = ? AND body = ?", 'Hey', 'Guy']
     end
 
     it 'should build WHERE statement with IN' do
       cequel[:posts].where(:id => [1, 2, 3, 4]).cql.
-        should == ['SELECT * FROM posts WHERE ? IN (?)', :id, [1, 2, 3, 4]]
+        should == ['SELECT * FROM posts WHERE id IN (?)', [1, 2, 3, 4]]
     end
 
     it 'should use = if provided one-element array' do
       cequel[:posts].where(:id => [1]).cql.
-        should == ['SELECT * FROM posts WHERE ? = ?', :id, 1]
+        should == ['SELECT * FROM posts WHERE id = ?', 1]
     end
 
     it 'should build WHERE statement from CQL string' do
@@ -292,12 +292,12 @@ describe Cequel::DataSet do
 
     it 'should aggregate multiple WHERE statements' do
       cequel[:posts].where(:title => 'Hey').where('body = ?', 'Sup').cql.
-        should == ["SELECT * FROM posts WHERE ? = ? AND body = ?", :title, 'Hey', 'Sup']
+        should == ["SELECT * FROM posts WHERE title = ? AND body = ?", 'Hey', 'Sup']
     end
 
     it 'should take a data set as a condition and perform an IN statement' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE ? = ?", [:blog_id], :title, 'Blog').
+        with("SELECT ? FROM posts WHERE title = ?", [:blog_id], 'Blog').
         and_return result_stub(
           {:blog_id => 1},
           {:blog_id => 3}
@@ -306,12 +306,12 @@ describe Cequel::DataSet do
       cequel[:blogs].where(
         :id => cequel[:posts].select(:blog_id).where(:title => 'Blog')
       ).cql.
-        should == ['SELECT * FROM blogs WHERE ? IN (?)', :id, [1, 3]]
+        should == ['SELECT * FROM blogs WHERE id IN (?)', [1, 3]]
     end
 
     it 'should raise EmptySubquery if inner data set has no results' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE ? = ?", [:blog_id], :title, 'Blog').
+        with("SELECT ? FROM posts WHERE title = ?", [:blog_id], 'Blog').
         and_return result_stub
 
       expect do
@@ -326,7 +326,7 @@ describe Cequel::DataSet do
   describe '#where!' do
     it 'should override chained conditions' do
       cequel[:posts].where(:title => 'Hey').where!(:title => 'Cequel').cql.
-        should == ["SELECT * FROM posts WHERE ? = ?", :title, 'Cequel']
+        should == ["SELECT * FROM posts WHERE title = ?", 'Cequel']
     end
   end
 
@@ -360,7 +360,7 @@ describe Cequel::DataSet do
         consistency(:quorum).
         where(:title => 'Hey').
         limit(3).cql.
-        should == ["SELECT ? FROM posts USING CONSISTENCY QUORUM WHERE ? = ? LIMIT 3", [:id, :title], :title, 'Hey']
+        should == ["SELECT ? FROM posts USING CONSISTENCY QUORUM WHERE title = ? LIMIT 3", [:id, :title], 'Hey']
     end
   end
 

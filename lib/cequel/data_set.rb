@@ -1,6 +1,6 @@
 module Cequel
 
-  # 
+  #
   # Encapsulates a data set, specified as a column family and optionally
   # various query elements.
   #
