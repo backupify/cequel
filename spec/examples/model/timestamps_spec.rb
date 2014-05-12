@@ -22,7 +22,7 @@ describe Cequel::Model::Timestamps do
 
   it 'should populate updated_at column on update' do
     connection.stub(:execute).
-      with("SELECT * FROM blogs WHERE ? = ? LIMIT 1", :id, 1).
+      with("SELECT * FROM blogs WHERE id = ? LIMIT 1", 1).
       and_return result_stub(
         :id => 1,
         :name => 'Blogtime',
@@ -32,13 +32,13 @@ describe Cequel::Model::Timestamps do
     blog = Blog.find(1)
     blog.name = 'Bloggy'
     connection.should_receive(:execute).
-      with("UPDATE blogs SET ? = ?, ? = ? WHERE ? = ?", 'name', 'Bloggy', 'updated_at', now, :id, 1)
+      with("UPDATE blogs SET ? = ?, ? = ? WHERE id = ?", 'name', 'Bloggy', 'updated_at', now, 1)
     blog.save
   end
 
   it 'should not update updated_at when calling save with no dirty attributes' do
     connection.stub(:execute).
-      with("SELECT * FROM blogs WHERE ? = ? LIMIT 1", :id, 1).
+      with("SELECT * FROM blogs WHERE id = ? LIMIT 1", 1).
       and_return result_stub(
         :id => 1,
         :name => 'Blogtime',

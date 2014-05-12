@@ -36,7 +36,7 @@ describe Cequel::Model::Magic do
     context 'with existing record specified as args' do
       it 'should magically look up one record by multiple values' do
         connection.stub(:execute).
-          with("SELECT * FROM posts WHERE title = ? AND published = ?", :title, 'Cequel', :published, true).
+          with("SELECT * FROM posts WHERE title = ? AND published = ?", 'Cequel', true).
           and_return result_stub(
             {:id => 1, :title => 'Cequel', :published => true},
             {:id => 2, :title => 'Cequel2', :published => true }
@@ -48,7 +48,7 @@ describe Cequel::Model::Magic do
 
       it 'should magically work on scopes' do
         connection.stub(:execute).
-          with("SELECT ? FROM posts WHERE id = ? AND published = ?", [:id], 'Cequel', true).
+          with("SELECT ? FROM posts WHERE title = ? AND published = ?", [:id], 'Cequel', true).
           and_return result_stub(
             {:id => 1},
             {:id => 2}
