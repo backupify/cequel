@@ -32,7 +32,7 @@ describe Cequel::Model::Timestamps do
     blog = Blog.find(1)
     blog.name = 'Bloggy'
     connection.should_receive(:execute).
-      with("UPDATE blogs SET ? = ?, ? = ? WHERE id = ?", 'name', 'Bloggy', 'updated_at', now, 1)
+      with("UPDATE blogs SET name = ?, updated_at = ? WHERE id = ?", 'Bloggy', now, 1)
     blog.save
   end
 

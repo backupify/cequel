@@ -130,7 +130,7 @@ describe Cequel::Model::Persistence do
 
       it 'should send UPDATE statement with changed columns using underlying attributes' do
         connection.should_receive(:execute).
-          with "UPDATE posts SET ? = ?, ? = ? WHERE id = ?", 'body', 'Cequel cequel', 'author_name', 'nworB taM', 1
+          with "UPDATE posts SET body = ?, author_name = ? WHERE id = ?", 'Cequel cequel', 'nworB taM', 1
         post.body = 'Cequel cequel'
         post.author_name = 'Mat Brown'
         post.save
@@ -163,7 +163,7 @@ describe Cequel::Model::Persistence do
 
     it 'should change attributes and save them' do
       connection.should_receive(:execute).
-        with "UPDATE posts SET ? = ? WHERE id = ?", 'body', 'Cequel cequel', 1
+        with "UPDATE posts SET body = ? WHERE id = ?", 'Cequel cequel', 1
       post.update_attributes(:body => 'Cequel cequel')
     end
   end

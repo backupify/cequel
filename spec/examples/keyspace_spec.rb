@@ -5,10 +5,10 @@ require 'logger'
 describe Cequel::Keyspace do
   describe '::batch' do
     it 'should send enclosed write statements in bulk' do
-      connection.should_receive(:execute).with(<<CQL, [:id, :title], [1, 'Hey'], :body, 'Body')
+      connection.should_receive(:execute).with(<<CQL, [:id, :title], [1, 'Hey'], 'Body')
 BEGIN BATCH
 INSERT INTO posts (?) VALUES (?)
-UPDATE posts SET ? = ?
+UPDATE posts SET body = ?
 DELETE FROM posts
 APPLY BATCH
 CQL
@@ -20,10 +20,10 @@ CQL
     end
 
     it 'should auto-apply if option given' do
-      connection.should_receive(:execute).with(<<CQL, [:id, :title], [1, 'Hey'], :body, 'Body')
+      connection.should_receive(:execute).with(<<CQL, [:id, :title], [1, 'Hey'], 'Body')
 BEGIN BATCH
 INSERT INTO posts (?) VALUES (?)
-UPDATE posts SET ? = ?
+UPDATE posts SET body = ?
 APPLY BATCH
 CQL
       connection.should_receive(:execute).with(<<CQL)

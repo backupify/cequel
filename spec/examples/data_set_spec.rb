@@ -67,7 +67,7 @@ describe Cequel::DataSet do
   describe '#update' do
     it 'should send basic update statement' do
       connection.should_receive(:execute).
-        with "UPDATE posts SET ? = ?, ? = ?", :title, 'Fun times', :body, 'Fun'
+        with "UPDATE posts SET title = ?, body = ?", 'Fun times', 'Fun'
 
       cequel[:posts].update(:title => 'Fun times', :body => 'Fun')
     end
@@ -76,7 +76,7 @@ describe Cequel::DataSet do
       time = Time.now - 10.minutes
 
       connection.should_receive(:execute).
-        with "UPDATE posts USING CONSISTENCY QUORUM AND TTL 600 AND TIMESTAMP #{time.to_i} SET ? = ?, ? = ?", :title, 'Fun times', :body, 'Fun'
+        with "UPDATE posts USING CONSISTENCY QUORUM AND TTL 600 AND TIMESTAMP #{time.to_i} SET title = ?, body = ?", 'Fun times', 'Fun'
 
       cequel[:posts].update(
         {:title => 'Fun times', :body => 'Fun'},
@@ -86,7 +86,7 @@ describe Cequel::DataSet do
 
     it 'should respect default consistency' do
       connection.should_receive(:execute).
-        with "UPDATE posts USING CONSISTENCY QUORUM SET ? = ?, ? = ?", :title, 'Fun times', :body, 'Fun'
+        with "UPDATE posts USING CONSISTENCY QUORUM SET title = ?, body = ?", 'Fun times', 'Fun'
 
       cequel.with_consistency(:quorum) do
         cequel[:posts].update(:title => 'Fun times', :body => 'Fun')
@@ -95,7 +95,7 @@ describe Cequel::DataSet do
 
     it 'should send update statement scoped to current row specifications' do
       connection.should_receive(:execute).
-        with "UPDATE posts SET ? = ? WHERE id = ?", :title, 'Fun', 4
+        with "UPDATE posts SET title = ? WHERE id = ?", 'Fun', 4
 
       cequel[:posts].where(:id => 4).update(:title => 'Fun')
     end
@@ -114,9 +114,9 @@ describe Cequel::DataSet do
   describe '#increment' do
     it 'should increment counter columns' do
       connection.should_receive(:execute).with(
-        'UPDATE comment_counts SET ? = ? + ?, ? = ? + ? WHERE blog_id = ?',
-        'somepost', 'somepost', 1,
-        'anotherpost', 'anotherpost', 2,
+        'UPDATE comment_counts SET somepost = somepost + ?, anotherpost = anotherpost + ? WHERE blog_id = ?',
+        1,
+        2,
         'myblog'
       )
       cequel[:comment_counts].where('blog_id' => 'myblog').
@@ -127,9 +127,9 @@ describe Cequel::DataSet do
   describe '#decrement' do
     it 'should decrement counter columns' do
       connection.should_receive(:execute).with(
-        'UPDATE comment_counts SET ? = ? - ?, ? = ? - ? WHERE blog_id = ?',
-        'somepost', 'somepost', 1,
-        'anotherpost', 'anotherpost', 2,
+        'UPDATE comment_counts SET somepost = somepost - ?, anotherpost = anotherpost - ? WHERE blog_id = ?',
+        1,
+        2,
         'myblog'
       )
       cequel[:comment_counts].where('blog_id' => 'myblog').

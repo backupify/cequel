@@ -22,7 +22,7 @@ describe Cequel::Model::Dictionary do
       dictionary[uuid1] = 1
       dictionary[uuid2] = 2
       connection.should_receive(:execute).
-        with('UPDATE blog_posts SET ? = ?, ? = ? WHERE blog_id = ?', uuid1, 1, uuid2, 2, 1)
+        with("UPDATE blog_posts SET #{uuid1} = ?, #{uuid2} = ? WHERE blog_id = ?", 1, 2, 1)
       dictionary.save
     end
 
@@ -30,7 +30,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid1] = 2
       connection.should_receive(:execute).
-        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid1, 2, 1)
+        with("UPDATE blog_posts SET #{uuid1} = ? WHERE blog_id = ?", 2, 1)
       dictionary.save
     end
 
@@ -38,7 +38,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid3] = 3
       connection.should_receive(:execute).
-        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid3, 3, 1)
+        with("UPDATE blog_posts SET #{uuid3} = ? WHERE blog_id = ?", 3, 1)
       dictionary.save
     end
 
@@ -64,7 +64,7 @@ describe Cequel::Model::Dictionary do
       dictionary[uuid1] = nil
       dictionary[uuid1] = 1
       connection.should_receive(:execute).once.
-        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid1, 1, 1)
+        with("UPDATE blog_posts SET #{uuid1} = ? WHERE blog_id = ?", 1, 1)
       dictionary.save
     end
 
@@ -72,7 +72,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid3] = 3
       connection.should_receive(:execute).once.
-        with('UPDATE blog_posts SET ? = ? WHERE blog_id = ?', uuid3, 3, 1)
+        with("UPDATE blog_posts SET #{uuid3} = ? WHERE blog_id = ?", 3, 1)
       2.times { dictionary.save }
     end
 
@@ -219,8 +219,8 @@ describe Cequel::Model::Dictionary do
         dictionary[4] = comment
         connection.should_receive(:execute).
           with(
-            'UPDATE post_comments SET ? = ? WHERE post_id = ?',
-            4, comment.to_json, 1
+            "UPDATE post_comments SET 4 = ? WHERE post_id = ?",
+            comment.to_json, 1
           )
         dictionary.save
       end

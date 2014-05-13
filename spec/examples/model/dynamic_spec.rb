@@ -24,7 +24,7 @@ describe Cequel::Model::Dynamic do
     category[:tag] = 'big-data'
     category[:color] = 'blue'
     connection.should_receive(:execute).
-      with "UPDATE categories SET ? = ?, ? = ? WHERE id = ?", 'tag', 'big-data', 'color', 'blue', 1
+      with "UPDATE categories SET tag = ?, color = ? WHERE id = ?", 'big-data', 'blue', 1
     category.save
   end
 

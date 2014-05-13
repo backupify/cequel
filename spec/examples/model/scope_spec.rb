@@ -511,7 +511,7 @@ describe Cequel::Model::Scope do
             {:id => 2}
           )
         connection.should_receive(:execute).
-          with "UPDATE posts SET ? = ? WHERE id IN (?)", :title, 'Cequel', [1, 2]
+          with "UPDATE posts SET title = ? WHERE id IN (?)", 'Cequel', [1, 2]
         scope.update_all(:title => 'Cequel')
       end
     end
@@ -521,7 +521,7 @@ describe Cequel::Model::Scope do
 
       it 'should issue scoped update request' do
         connection.should_receive(:execute).
-          with "UPDATE posts SET ? = ? WHERE id IN (?)", :title, 'Cequel', [1, 2]
+          with "UPDATE posts SET title = ? WHERE id IN (?)", 'Cequel', [1, 2]
         scope.update_all(:title => 'Cequel')
       end
 
@@ -536,7 +536,7 @@ describe Cequel::Model::Scope do
           and_return result_stub({:id => 1}, {:id => 2})
 
         connection.should_receive(:execute).
-          with "UPDATE posts SET ? = ? WHERE id IN (?)", :title, 'Cequel', [1, 2]
+          with "UPDATE posts SET title = ? WHERE id IN (?)", 'Cequel', [1, 2]
 
         scope.update_all(:title => 'Cequel')
       end
@@ -555,7 +555,7 @@ describe Cequel::Model::Scope do
           and_return result_stub({:id => 3}, {:id => 4})
 
         connection.should_receive(:execute).
-          with "UPDATE posts SET ? = ? WHERE id IN (?)", :published, true, [1, 2, 3, 4]
+          with "UPDATE posts SET published = ? WHERE id IN (?)", true, [1, 2, 3, 4]
 
         scope.update_all(:published => true)
       end

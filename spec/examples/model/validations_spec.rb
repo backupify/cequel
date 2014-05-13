@@ -49,7 +49,7 @@ describe Cequel::Model::Validations do
 
     it 'should change attributes and save them if valid' do
       connection.should_receive(:execute).
-        with "UPDATE posts SET ? = ? WHERE id = ?", 'body', 'Cequel cequel', 1
+        with "UPDATE posts SET body = ? WHERE id = ?", 'Cequel cequel', 1
       post.update_attributes!(:body => 'Cequel cequel')
     end
 
