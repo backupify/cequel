@@ -54,11 +54,10 @@ describe Cequel::Model::Associations do
       Time.stub(:now).and_return now
       post.blog = Blog.new(:id => 3, :name => 'This blog')
       connection.should_receive(:execute).
-        with "INSERT INTO blogs (?) VALUES (?)",
-          ['id', 'published', 'name', 'updated_at', 'created_at'],
+        with "INSERT INTO blogs (id, published, name, updated_at, created_at) VALUES (?)",
           [3, true, 'This blog', now, now]
       connection.stub(:execute).
-        with "INSERT INTO posts (?) VALUES (?)", ['id', 'blog_id'], [post.id, 3]
+        with "INSERT INTO posts (id, blog_id) VALUES (?)", [post.id, 3]
       post.save
     end
 

@@ -5,14 +5,14 @@ describe Cequel::DataSet do
   describe '#insert' do
     it 'should insert a row' do
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?)", [:id, :title], [1, 'Fun times']
+        with "INSERT INTO posts (id, title) VALUES (?)", [1, 'Fun times']
 
       cequel[:posts].insert(:id => 1, :title => 'Fun times')
     end
 
     it 'should include consistency argument' do
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?) USING CONSISTENCY QUORUM", [:id, :title], [1, 'Fun times']
+        with "INSERT INTO posts (id, title) VALUES (?) USING CONSISTENCY QUORUM", [1, 'Fun times']
 
       cequel[:posts].insert(
         {:id => 1, :title => 'Fun times'},
@@ -22,7 +22,7 @@ describe Cequel::DataSet do
 
     it 'should respect with_consistency block' do
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?) USING CONSISTENCY QUORUM", [:id, :title], [1, 'Fun times']
+        with "INSERT INTO posts (id, title) VALUES (?) USING CONSISTENCY QUORUM", [1, 'Fun times']
 
       cequel.with_consistency(:quorum) do
         cequel[:posts].insert(:id => 1, :title => 'Fun times')
@@ -31,7 +31,7 @@ describe Cequel::DataSet do
 
     it 'should include ttl argument' do
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?) USING TTL 600", [:id, :title], [1, 'Fun times']
+        with "INSERT INTO posts (id, title) VALUES (?) USING TTL 600", [1, 'Fun times']
 
       cequel[:posts].insert(
         {:id => 1, :title => 'Fun times'},
@@ -42,7 +42,7 @@ describe Cequel::DataSet do
     it 'should include timestamp argument' do
       time = Time.now - 10.minutes
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?) USING TIMESTAMP #{time.to_i}", [:id, :title], [1, 'Fun times']
+        with "INSERT INTO posts (id, title) VALUES (?) USING TIMESTAMP #{time.to_i}", [1, 'Fun times']
 
       cequel[:posts].insert(
         {:id => 1, :title => 'Fun times'},
@@ -53,8 +53,8 @@ describe Cequel::DataSet do
     it 'should include multiple arguments joined by AND' do
       time = Time.now - 10.minutes
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?) USING CONSISTENCY QUORUM AND TTL 600 AND TIMESTAMP #{time.to_i}",
-        [:id, :title], [1, 'Fun times']
+        with "INSERT INTO posts (id, title) VALUES (?) USING CONSISTENCY QUORUM AND TTL 600 AND TIMESTAMP #{time.to_i}",
+        [1, 'Fun times']
 
       cequel[:posts].insert(
         {:id => 1, :title => 'Fun times'},

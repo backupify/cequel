@@ -14,8 +14,7 @@ describe Cequel::Model::Timestamps do
 
   it 'should populate created_at and updated_at column on create' do
     connection.should_receive(:execute).
-      with "INSERT INTO blogs (?) VALUES (?)",
-        ['id', 'published', 'updated_at', 'created_at'],
+      with "INSERT INTO blogs (id, published, updated_at, created_at) VALUES (?)",
         [1, true, now, now]
     Blog.create!(:id => 1)
   end

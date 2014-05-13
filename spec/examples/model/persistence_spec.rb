@@ -96,7 +96,7 @@ describe Cequel::Model::Persistence do
 
       it 'should persist only columns with values' do
         connection.should_receive(:execute).
-          with("INSERT INTO posts (?) VALUES (?)", ['id', 'title'], [1, 'Cequel'])
+          with("INSERT INTO posts (id, title) VALUES (?)", [1, 'Cequel'])
 
         post.title = 'Cequel'
         post.save
@@ -104,7 +104,7 @@ describe Cequel::Model::Persistence do
 
       it 'should mark instance as persisted' do
         connection.stub(:execute).
-          with("INSERT INTO posts (?) VALUES (?)", ['id', 'title'], [1, 'Cequel'])
+          with("INSERT INTO posts (id, title) VALUES (?)", [1, 'Cequel'])
 
         post.title = 'Cequel'
         post.save
@@ -186,14 +186,14 @@ describe Cequel::Model::Persistence do
   describe '::create' do
     it 'should persist only columns with values' do
       connection.should_receive(:execute).
-        with("INSERT INTO posts (?) VALUES (?)", ['id', 'title'], [1, 'Cequel'])
+        with("INSERT INTO posts (id, title) VALUES (?)", [1, 'Cequel'])
 
       Post.create(:id => 1, :title => 'Cequel')
     end
 
     it 'should return post instance and mark it as persisted' do
       connection.stub(:execute).
-        with("INSERT INTO posts (?) VALUES (?)", ['id', 'title'], [1, 'Cequel'])
+        with("INSERT INTO posts (id, title) VALUES (?)", [1, 'Cequel'])
 
       Post.create(:id => 1, :title => 'Cequel').should be_persisted
     end

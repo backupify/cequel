@@ -37,11 +37,16 @@ module Cequel
     #
     def insert(data, options = {})
       options.symbolize_keys!
+      columns, values = [], []
+      data.each do |column, value|
+        columns << Cequel::Model::Column.convert_cql(column)
+        values << value
+      end
       cql = "INSERT INTO #{@column_family}" <<
-        " (?) VALUES (?)" <<
+        " (#{columns.join(", ")}) VALUES (?)" <<
         generate_upsert_options(options)
 
-      @keyspace.write(cql, data.keys, data.values)
+      @keyspace.write(cql, values)
     end
 
     #

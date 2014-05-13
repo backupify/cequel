@@ -77,8 +77,7 @@ describe Cequel::Model::Magic do
         and_return result_stub
       connection.should_receive(:execute).
         with(
-          "INSERT INTO blogs (?) VALUES (?)",
-          ['id', 'published', 'updated_at', 'created_at'],
+          "INSERT INTO blogs (id, published, updated_at, created_at) VALUES (?)",
           [1, true, now, now]
         )
 
@@ -101,8 +100,7 @@ describe Cequel::Model::Magic do
         and_return result_stub
       connection.should_receive(:execute).
         with(
-          "INSERT INTO posts (?) VALUES (?)",
-          ['id', 'title', 'published'],
+          "INSERT INTO posts (id, title, published) VALUES (?)",
           [2, 'Cequel', true])
 
       Post.find_or_create_by_title_and_published(
@@ -116,8 +114,7 @@ describe Cequel::Model::Magic do
         and_return result_stub
       connection.should_receive(:execute).
         with(
-          "INSERT INTO posts (?) VALUES (?)",
-          ['id', 'title', 'published'],
+          "INSERT INTO posts (id, title, published) VALUES (?)",
           [2, 'Cequel', true]
         )
 

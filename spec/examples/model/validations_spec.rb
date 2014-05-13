@@ -18,7 +18,7 @@ describe Cequel::Model::Validations do
 
     it 'should return true and persist model if valid' do
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?)", ['id', 'title'], [1, 'Cequel']
+        with "INSERT INTO posts (id, title) VALUES (?)", [1, 'Cequel']
 
       Post.new(:id => 1, :title => 'Cequel', :require_title => true).save.should be_true
     end
@@ -33,7 +33,7 @@ describe Cequel::Model::Validations do
 
     it 'should persist model and return self if valid' do
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?)", ['id', 'title'], [1, 'Cequel']
+        with "INSERT INTO posts (id, title) VALUES (?)", [1, 'Cequel']
 
       post = Post.new(:id => 1, :title => 'Cequel', :require_title => true)
       post.save!.should == post
@@ -69,7 +69,7 @@ describe Cequel::Model::Validations do
 
     it 'should and return model if valid' do
       connection.should_receive(:execute).
-        with "INSERT INTO posts (?) VALUES (?)", ['id', 'title'], [1, 'Cequel']
+        with "INSERT INTO posts (id, title) VALUES (?)", [1, 'Cequel']
 
       Post.create!(:id => 1, :title => 'Cequel', :require_title => true).
         title.should == 'Cequel'
