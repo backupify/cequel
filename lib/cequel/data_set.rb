@@ -97,9 +97,10 @@ module Cequel
     #
     def delete(*columns)
       options = columns.extract_options!
+      columns = columns.collect { |column| Cequel::Model::Column.convert_cql(column) }
       column_aliases = columns.empty? ? '' : " #{columns.join(', ')}"
       statement = Statement.new.append('DELETE')
-      statement = statement.append(' ?', columns) if columns.any?
+      statement = statement.append(column_aliases) if columns.any?
       statement = statement.
         append(" FROM #{@column_family}").
         append(generate_upsert_options(options)).

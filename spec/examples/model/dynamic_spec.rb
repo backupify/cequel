@@ -35,7 +35,7 @@ describe Cequel::Model::Dynamic do
     category.save
     category[:tag] = nil
     connection.should_receive(:execute).
-      with "DELETE ? FROM categories WHERE id = ?", ['tag'], 1
+      with "DELETE tag FROM categories WHERE id = ?", 1
     category.save
   end
 end

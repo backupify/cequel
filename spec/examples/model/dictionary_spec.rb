@@ -46,7 +46,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid1] = nil
       connection.should_receive(:execute).
-        with('DELETE ? FROM blog_posts WHERE blog_id = ?', [uuid1], 1)
+        with("DELETE #{uuid1} FROM blog_posts WHERE blog_id = ?", 1)
       dictionary.save
     end
 
@@ -55,7 +55,7 @@ describe Cequel::Model::Dictionary do
       dictionary[uuid1] = 1
       dictionary[uuid1] = nil
       connection.should_receive(:execute).once.
-        with('DELETE ? FROM blog_posts WHERE blog_id = ?', [uuid1], 1)
+        with("DELETE #{uuid1} FROM blog_posts WHERE blog_id = ?", 1)
       dictionary.save
     end
 
@@ -80,7 +80,7 @@ describe Cequel::Model::Dictionary do
       dictionary.load
       dictionary[uuid1] = nil
       connection.should_receive(:execute).once.
-        with('DELETE ? FROM blog_posts WHERE blog_id = ?', [uuid1], 1)
+        with("DELETE #{uuid1} FROM blog_posts WHERE blog_id = ?", 1)
       2.times { dictionary.save }
     end
 

@@ -138,14 +138,14 @@ describe Cequel::Model::Persistence do
 
       it 'should send DELETE statement with removed columns' do
         connection.should_receive(:execute).
-          with "DELETE ? FROM posts WHERE id = ?", ['title'], 1
+          with "DELETE title FROM posts WHERE id = ?", 1
         post.title = nil
         post.save
       end
 
       it 'should mark record as transient if all attributes removed' do
         connection.stub(:execute).
-          with "DELETE ? FROM posts WHERE id = ?", ['title', 'blog_id'], 1
+          with "DELETE title, blog_id FROM posts WHERE id = ?", 1
         post.title = nil
         post.blog_id = nil
         post.save

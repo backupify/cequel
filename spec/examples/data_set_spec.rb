@@ -1,4 +1,5 @@
 require File.expand_path('../spec_helper', __FILE__)
+require 'cequel/model'
 
 describe Cequel::DataSet do
   describe '#insert' do
@@ -147,7 +148,7 @@ describe Cequel::DataSet do
 
     it 'should send delete statement for specified columns' do
       connection.should_receive(:execute).
-        with 'DELETE ? FROM posts', [:title, :body]
+        with 'DELETE title, body FROM posts'
 
       cequel[:posts].delete(:title, :body)
     end
@@ -156,7 +157,7 @@ describe Cequel::DataSet do
       time = Time.now - 10.minutes
 
       connection.should_receive(:execute).
-        with "DELETE ? FROM posts USING CONSISTENCY QUORUM AND TIMESTAMP #{time.to_i}", [:title, :body]
+        with "DELETE title, body FROM posts USING CONSISTENCY QUORUM AND TIMESTAMP #{time.to_i}"
 
       cequel[:posts].delete(
         :title, :body,
@@ -166,7 +167,7 @@ describe Cequel::DataSet do
 
     it 'should respect default consistency' do
       connection.should_receive(:execute).
-        with "DELETE ? FROM posts USING CONSISTENCY QUORUM", [:title, :body]
+        with "DELETE title, body FROM posts USING CONSISTENCY QUORUM"
 
       cequel.with_consistency(:quorum) do
         cequel[:posts].delete(:title, :body)
