@@ -31,7 +31,7 @@ shared_examples 'readable dictionary' do
 
       it 'should load column from cassandra' do
         connection.stub(:execute).
-          with("SELECT #{uuid1} FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
+          with("SELECT * FROM #{cf} WHERE blog_id = ? AND 1 = ? LIMIT 1", 1, uuid1).
           and_return result_stub(uuid1 => 1)
         dictionary[uuid1].should == 1
       end

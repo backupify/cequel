@@ -107,7 +107,7 @@ describe Cequel::Model::Dictionary do
     it 'should remove all properties from memory' do
       dictionary.destroy
       connection.stub(:execute).
-        with("SELECT #{uuid1} FROM blog_posts WHERE blog_id = ? LIMIT 1", 1).
+        with("SELECT * FROM blog_posts WHERE blog_id = ? AND 1 = ? LIMIT 1", 1, uuid1).
         and_return result_stub({})
       dictionary[uuid1].should be_nil
     end
@@ -229,7 +229,7 @@ describe Cequel::Model::Dictionary do
     describe '#[]' do
       it 'should return deserialized data' do
         connection.stub(:execute).with(
-            'SELECT 4 FROM post_comments WHERE post_id = ? LIMIT 1', 1
+            'SELECT * FROM post_comments WHERE post_id = ? AND 1 = ? LIMIT 1', 1, 4
         ).and_return result_stub(4 => comment.to_json)
         dictionary[4].should == comment
       end

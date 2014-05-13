@@ -77,7 +77,7 @@ module Cequel
         if @loaded
           @row[column]
         else
-          scope.select(column).first[column]
+          scope.where(@key => column).first[column]
         end
       end
 
