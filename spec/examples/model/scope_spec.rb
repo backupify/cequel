@@ -269,7 +269,7 @@ describe Cequel::Model::Scope do
           {:id => 2, :title => 'Post 2'}
         )
       connection.stub(:execute).
-        with("SELECT * FROM posts WHERE ? > ? LIMIT 2", :id, 2).
+        with("SELECT * FROM posts WHERE id > ? LIMIT 2", 2).
         and_return result_stub(:id => 3, :title => 'Post 3')
       batches = []
       Post.find_in_batches(:batch_size => 2) do |batch|
@@ -362,7 +362,7 @@ describe Cequel::Model::Scope do
           {:id => 2, :title => 'Post 2'}
         )
       connection.stub(:execute).
-        with("SELECT * FROM posts WHERE ? > ? LIMIT 2", :id, 2).
+        with("SELECT * FROM posts WHERE id > ? LIMIT 2", 2).
         and_return result_stub(:id => 3, :title => 'Post 3')
       Post.find_each(:batch_size => 2).map { |post| post.title }.
         should == ['Post 1', 'Post 2', 'Post 3']
@@ -384,7 +384,7 @@ describe Cequel::Model::Scope do
 
     it 'should delegate to enumerator if block given' do
       connection.stub(:execute).
-        with("SELECT * FROM posts WHERE blog_id = ?", :blog_id, 1).
+        with("SELECT * FROM posts WHERE blog_id = ?", 1).
         and_return result_stub(
           {:id => 1, :title => 'Cequel'},
           {:id => 2, :title => 'Cequel 2'},

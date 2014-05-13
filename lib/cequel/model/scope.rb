@@ -295,7 +295,7 @@ module Cequel
           end
           last_key = batch_rows.last[key_alias]
           batch_scope =
-            scope.where("? > ?", key_alias, last_key)
+            scope.where("#{key_alias} > ?", last_key)
         end while batch_rows.length == batch_size
       end
 
@@ -356,7 +356,7 @@ module Cequel
       end
 
     end
-    
+
   end
 
 end
