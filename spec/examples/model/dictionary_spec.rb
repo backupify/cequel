@@ -107,7 +107,7 @@ describe Cequel::Model::Dictionary do
     it 'should remove all properties from memory' do
       dictionary.destroy
       connection.stub(:execute).
-        with('SELECT ? FROM blog_posts WHERE blog_id = ? LIMIT 1', [uuid1], 1).
+        with("SELECT #{uuid1} FROM blog_posts WHERE blog_id = ? LIMIT 1", 1).
         and_return result_stub({})
       dictionary[uuid1].should be_nil
     end
@@ -172,7 +172,7 @@ describe Cequel::Model::Dictionary do
     describe '#slice' do
       it 'should override loaded slice with unsaved data in memory' do
         connection.stub(:execute).
-          with('SELECT ? FROM blog_posts WHERE blog_id = ? LIMIT 1', [uuid1,uuid2,uuid3,uuid4], 1).
+          with("SELECT #{uuid1}, #{uuid2}, #{uuid3}, #{uuid4} FROM blog_posts WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub(uuid1 => 1, uuid2 => 2, uuid3 => 3)
         dictionary.slice(uuid1, uuid2, uuid3, uuid4).should ==
           {uuid1 => -1, uuid2 => 2, uuid4 => 4}
@@ -229,8 +229,7 @@ describe Cequel::Model::Dictionary do
     describe '#[]' do
       it 'should return deserialized data' do
         connection.stub(:execute).with(
-            'SELECT ? FROM post_comments WHERE post_id = ? LIMIT 1',
-            [4], 1
+            'SELECT 4 FROM post_comments WHERE post_id = ? LIMIT 1', 1
         ).and_return result_stub(4 => comment.to_json)
         dictionary[4].should == comment
       end
@@ -239,8 +238,7 @@ describe Cequel::Model::Dictionary do
     describe '#slice' do
       it 'should return deserialized values' do
         connection.stub(:execute).with(
-          'SELECT ? FROM post_comments WHERE post_id = ? LIMIT 1',
-          [4, 5], 1
+          'SELECT 4, 5 FROM post_comments WHERE post_id = ? LIMIT 1', 1
         ).and_return result_stub(4 => comment.to_json)
         dictionary.slice(4, 5).should == {4 => comment}
       end

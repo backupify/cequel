@@ -31,7 +31,7 @@ shared_examples 'readable dictionary' do
 
       it 'should load column from cassandra' do
         connection.stub(:execute).
-          with("SELECT ? FROM #{cf} WHERE blog_id = ? LIMIT 1", [uuid1], 1).
+          with("SELECT #{uuid1} FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub(uuid1 => 1)
         dictionary[uuid1].should == 1
       end
@@ -41,7 +41,7 @@ shared_examples 'readable dictionary' do
     describe '#slice' do
       it 'should load columns from data store' do
         connection.stub(:execute).
-          with("SELECT ? FROM #{cf} WHERE blog_id = ? LIMIT 1", [uuid1,uuid2], 1).
+          with("SELECT #{uuid1}, #{uuid2} FROM #{cf} WHERE blog_id = ? LIMIT 1", 1).
           and_return result_stub(uuid1 => 1, uuid2 => 2)
         dictionary.slice(uuid1, uuid2).should == {uuid1 => 1, uuid2 => 2}
       end

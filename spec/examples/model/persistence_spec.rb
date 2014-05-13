@@ -14,7 +14,7 @@ describe Cequel::Model::Persistence do
 
     it 'should not set defaults when hydrating instance' do
       connection.stub(:execute).
-        with("SELECT ? FROM blogs WHERE id = ? LIMIT 1", [:id, :name], 2).
+        with("SELECT id, name FROM blogs WHERE id = ? LIMIT 1", 2).
         and_return result_stub(:id => 1, :title => 'Big Data')
 
       blog = Blog.select(:id, :name).find(2)
@@ -54,7 +54,7 @@ describe Cequel::Model::Persistence do
 
     it 'should raise RecordNotFound if row has nil data' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE id = ? LIMIT 1", [:title], 2).
+        with("SELECT title FROM posts WHERE id = ? LIMIT 1", 2).
         and_return result_stub(:title => nil)
 
       expect { Post.select(:title).find(2) }.to raise_error Cequel::Model::RecordNotFound

@@ -102,7 +102,7 @@ describe Cequel::DataSet do
     end
 
     it 'should do nothing if row specification contains empty subquery' do
-      connection.stub(:execute).with("SELECT ? FROM posts", [:blog_id]).
+      connection.stub(:execute).with("SELECT blog_id FROM posts").
         and_return result_stub
 
       expect do
@@ -182,7 +182,7 @@ describe Cequel::DataSet do
     end
 
     it 'should not do anything if scoped to empty subquery' do
-      connection.stub(:execute).with("SELECT ? FROM posts", [:blog_id]).
+      connection.stub(:execute).with("SELECT blog_id FROM posts").
         and_return result_stub
 
       expect do
@@ -209,17 +209,17 @@ describe Cequel::DataSet do
   describe '#select' do
     it 'should generate select statement with given columns' do
       cequel[:posts].select(:id, :title).cql.
-        should == ['SELECT ? FROM posts', [:id, :title]]
+        should == ['SELECT id, title FROM posts']
     end
 
     it 'should accept array argument' do
       cequel[:posts].select([:id, :title]).cql.
-        should == ['SELECT ? FROM posts', [:id, :title]]
+        should == ['SELECT id, title FROM posts']
     end
 
     it 'should combine multiple selects' do
       cequel[:posts].select(:id).select(:title).cql.
-        should == ['SELECT ? FROM posts', [:id, :title]]
+        should == ['SELECT id, title FROM posts']
     end
 
     it 'should accept :first option' do
@@ -256,7 +256,7 @@ describe Cequel::DataSet do
   describe '#select!' do
     it 'should generate select statement with given columns' do
       cequel[:posts].select(:id, :title).select!(:published).cql.
-        should == ['SELECT ? FROM posts', [:published]]
+        should == ['SELECT published FROM posts']
     end
   end
 
@@ -298,7 +298,7 @@ describe Cequel::DataSet do
 
     it 'should take a data set as a condition and perform an IN statement' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE title = ?", [:blog_id], 'Blog').
+        with("SELECT blog_id FROM posts WHERE title = ?", 'Blog').
         and_return result_stub(
           {:blog_id => 1},
           {:blog_id => 3}
@@ -312,7 +312,7 @@ describe Cequel::DataSet do
 
     it 'should raise EmptySubquery if inner data set has no results' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE title = ?", [:blog_id], 'Blog').
+        with("SELECT blog_id FROM posts WHERE title = ?", 'Blog').
         and_return result_stub
 
       expect do
@@ -361,7 +361,7 @@ describe Cequel::DataSet do
         consistency(:quorum).
         where(:title => 'Hey').
         limit(3).cql.
-        should == ["SELECT ? FROM posts USING CONSISTENCY QUORUM WHERE title = ? LIMIT 3", [:id, :title], 'Hey']
+        should == ["SELECT id, title FROM posts USING CONSISTENCY QUORUM WHERE title = ? LIMIT 3", 'Hey']
     end
   end
 
@@ -393,7 +393,7 @@ describe Cequel::DataSet do
     end
 
     it 'should return no results if subquery is empty' do
-      connection.stub(:execute).with("SELECT ? FROM posts", [:blog_id]).
+      connection.stub(:execute).with("SELECT blog_id FROM posts").
         and_return result_stub
 
       cequel[:blogs].where(:id => cequel[:posts].select(:blog_id)).to_a.
@@ -410,7 +410,7 @@ describe Cequel::DataSet do
     end
 
     it 'should return nil if subquery returns empty results' do
-      connection.stub(:execute).with("SELECT ? FROM posts", [:blog_id]).
+      connection.stub(:execute).with("SELECT blog_id FROM posts").
         and_return result_stub
 
       cequel[:blogs].where(:id => cequel[:posts].select(:blog_id)).first.
@@ -427,7 +427,7 @@ describe Cequel::DataSet do
     end
 
     it 'should return 0 if subquery returns no results' do
-      connection.stub(:execute).with("SELECT ? FROM posts", [:blog_id]).
+      connection.stub(:execute).with("SELECT blog_id FROM posts").
         and_return result_stub
 
       cequel[:blogs].where(:id => cequel[:posts].select(:blog_id)).count.

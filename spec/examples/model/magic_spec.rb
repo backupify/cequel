@@ -20,7 +20,7 @@ describe Cequel::Model::Magic do
 
     it 'should magically work on scopes' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE title = ? AND published = ? LIMIT 1", [:id], 'Cequel', true).
+        with("SELECT id FROM posts WHERE title = ? AND published = ? LIMIT 1", 'Cequel', true).
         and_return result_stub(:id => 1)
 
       Post.select(:id).find_by_title_and_published('Cequel', true).id.should == 1
@@ -48,7 +48,7 @@ describe Cequel::Model::Magic do
 
       it 'should magically work on scopes' do
         connection.stub(:execute).
-          with("SELECT ? FROM posts WHERE title = ? AND published = ?", [:id], 'Cequel', true).
+          with("SELECT id FROM posts WHERE title = ? AND published = ?", 'Cequel', true).
           and_return result_stub(
             {:id => 1},
             {:id => 2}
@@ -125,7 +125,7 @@ describe Cequel::Model::Magic do
 
     it 'should work on scopes' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE title = ? AND published = ? LIMIT 1", [:id], 'Cequel', true).
+        with("SELECT id FROM posts WHERE title = ? AND published = ? LIMIT 1", 'Cequel', true).
         and_return result_stub(:id => 1)
 
       Post.select(:id).find_or_create_by_title_and_published('Cequel', true).id.
@@ -185,7 +185,7 @@ describe Cequel::Model::Magic do
 
     it 'should work on scopes' do
       connection.stub(:execute).
-        with("SELECT ? FROM posts WHERE title = ? AND published = ? LIMIT 1", [:id], 'Cequel', true).
+        with("SELECT id FROM posts WHERE title = ? AND published = ? LIMIT 1", 'Cequel', true).
         and_return result_stub(:id => 1)
 
       Post.select(:id).find_or_initialize_by_title_and_published('Cequel', true).id.

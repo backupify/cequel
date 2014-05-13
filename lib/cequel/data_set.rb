@@ -332,8 +332,7 @@ module Cequel
           cql << '?..?'
           args << (@select_options[:from] || '') << (@select_options[:to] || '')
         elsif @select_columns.any?
-          cql << '?'
-          args << @select_columns
+          cql << @select_columns.collect { |column| Cequel::Model::Column.convert_cql(column) }.join(", ")
         else
           cql << '*'
         end
