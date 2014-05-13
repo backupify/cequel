@@ -13,6 +13,14 @@ module Cequel
         @default = options[:default]
       end
 
+      def self.convert_cql(obj)
+        case obj
+        when SimpleUUID::UUID
+          obj.to_guid
+        else
+          obj
+        end
+      end
     end
 
   end

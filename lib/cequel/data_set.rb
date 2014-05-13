@@ -58,7 +58,7 @@ module Cequel
       statement = Statement.new.
         append("UPDATE #{@column_family}").
         append(generate_upsert_options(options)).
-        append(" SET " << data.keys.map { |k| "? = ?" }.join(', '), *data.to_a.flatten).
+        append(" SET " << data.keys.map { |k| "#{Cequel::Model::Column.convert_cql(k)} = ?" }.join(', '), *data.values).
         append(*row_specifications_cql)
       @keyspace.write(*statement.args)
     rescue EmptySubquery
@@ -67,15 +67,16 @@ module Cequel
 
     def increment(data, options = {})
       operations = data.map do |key, value|
+        column = Cequel::Model::Column.convert_cql(key)
         operator = value < 0 ? '-' : '+'
-        "? = ? #{operator} ?"
+        "#{column} = #{column} #{operator} ?"
       end
       statement = Statement.new.
         append("UPDATE #{@column_family}").
         append(generate_upsert_options(options)).
         append(
           " SET " << operations.join(', '),
-          *data.flat_map { |column, count| [column, column, count.abs] }
+          *data.values.collect { |count| count.abs }
         ).append(*row_specifications_cql)
 
       @keyspace.write(*statement.args)
