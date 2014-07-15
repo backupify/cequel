@@ -14,7 +14,7 @@ require 'cequel/model/errors'
 require 'cequel/model/inheritable'
 require 'cequel/model/instance_internals'
 require 'cequel/model/local_association'
-# require 'cequel/model/mass_assignment_security'
+require 'cequel/model/mass_assignment_security'
 require 'cequel/model/magic'
 require 'cequel/model/naming'
 require 'cequel/model/observer'
@@ -55,7 +55,7 @@ module Cequel
       include Validations
       include ActiveModel::Observing
       include Dirty
-      # include MassAssignmentSecurity
+      include MassAssignmentSecurity
       include Associations
       extend Inheritable
       extend Magic
