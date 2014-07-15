@@ -19,7 +19,7 @@ class Post
 
   validates :title, :presence => true, :if => :require_title?
 
-  attr_protected :blog_id
+  attr_accessor :blog_id
 
   attr_writer :require_title
 

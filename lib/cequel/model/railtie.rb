@@ -1,3 +1,5 @@
+require 'rails/observers/railtie'
+
 module Cequel
 
   module Model

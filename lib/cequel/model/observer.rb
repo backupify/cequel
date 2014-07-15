@@ -1,11 +1,14 @@
+require 'rails-observers'
+require 'rails/observers/active_model'
+
 module Cequel
 
   module Model
 
-    # 
+    #
     # This is ripped directly off of ActiveRecord::Observer
     #
-    class Observer < ActiveModel::Observer
+    class Observer < ::ActiveModel::Observer
 
       protected
 
@@ -36,7 +39,7 @@ module Cequel
       end
 
     end
-    
+
   end
 
 end
