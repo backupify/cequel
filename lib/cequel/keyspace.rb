@@ -162,7 +162,8 @@ module Cequel
     private
 
     def build_connection
-      options = @keyspace ? {:keyspace => @keyspace } : {}
+      # We need to specify the '2.0.0' version now because of an update to CassandraCQL
+      options = @keyspace ? {:keyspace => @keyspace, :cql_version => '2.0.0' } : {}
       CassandraCQL::Database.new(
         @hosts,
         options,
