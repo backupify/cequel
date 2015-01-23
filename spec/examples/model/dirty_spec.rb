@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Dirty do
+describe CequelCQL2::Model::Dirty do
   let(:post) { Post.new(:id => 1) }
 
   it 'should not have changed attributes by default' do

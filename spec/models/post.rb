@@ -1,6 +1,6 @@
 class Post
 
-  include Cequel::Model
+  include CequelCQL2::Model
 
   key :id, :int
   column :title, :varchar

@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Properties do
+describe CequelCQL2::Model::Properties do
   let(:post) { Post.new(:id => 1) }
 
   it 'should have getter for key' do

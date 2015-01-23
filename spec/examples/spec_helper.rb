@@ -8,5 +8,5 @@ Dir.glob(File.expand_path('../../shared/**/*.rb', __FILE__)).each do |file|
 end
 
 RSpec.configure do |config|
-  config.include(Cequel::SpecSupport::Helpers)
+  config.include(CequelCQL2::SpecSupport::Helpers)
 end

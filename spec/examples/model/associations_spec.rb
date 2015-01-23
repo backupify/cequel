@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Associations do
+describe CequelCQL2::Model::Associations do
 
   describe '::belongs_to' do
     let(:post) do
@@ -73,14 +73,14 @@ describe Cequel::Model::Associations do
       connection.stub(:execute).
         with('SELECT * FROM posts WHERE ? = ?', :blog_id, 2).
         and_return result_stub(
-          {:id => 1, :title => 'Cequel'},
-          {:id => 2, :title => 'Cequel revisited'}
+          {:id => 1, :title => 'CequelCQL2'},
+          {:id => 2, :title => 'CequelCQL2 revisited'}
         )
     end
 
     it 'should provide scope for associated instances' do
       blog.posts.map { |post| post.title }.should ==
-        ['Cequel', 'Cequel revisited']
+        ['CequelCQL2', 'CequelCQL2 revisited']
     end
 
     it 'should destroy associated instances if :dependent => :destroy' do

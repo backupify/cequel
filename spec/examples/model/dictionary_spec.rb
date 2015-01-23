@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Dictionary do
+describe CequelCQL2::Model::Dictionary do
   let(:uuid1) { uuid }
   let(:uuid2) { uuid }
   let(:uuid3) { uuid }

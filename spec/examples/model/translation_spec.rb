@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Translation do
+describe CequelCQL2::Model::Translation do
   before do
     I18n.backend.load_translations(
       File.expand_path('../../../support/en.yml', __FILE__))

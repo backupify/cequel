@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Counter do
+describe CequelCQL2::Model::Counter do
   let(:counter) { CommentCounts[1] }
   let(:dictionary) { counter }
   let(:uuid1) { CassandraCQL::UUID.new }

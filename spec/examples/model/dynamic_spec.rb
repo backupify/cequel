@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Dynamic do
+describe CequelCQL2::Model::Dynamic do
 
   let(:category) { Category.new(:id => 1, :name => 'Big Data') }
 

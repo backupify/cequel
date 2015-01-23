@@ -1,4 +1,4 @@
-class PostComments < Cequel::Model::Dictionary
+class PostComments < CequelCQL2::Model::Dictionary
   key :post_id, :int
   maps :int => :text
 

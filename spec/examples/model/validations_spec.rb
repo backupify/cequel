@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Validations do
+describe CequelCQL2::Model::Validations do
   describe '#valid?' do
     it 'should be false if model is not valid' do
       Post.new(:id => 1, :require_title => true).should_not be_valid
@@ -28,7 +28,7 @@ describe Cequel::Model::Validations do
     it 'should raise error and not persist model if invalid' do
       expect do
         Post.new(:id => 1, :body => 'Cequel', :require_title => true).save!
-      end.to raise_error(Cequel::Model::RecordInvalid)
+      end.to raise_error(CequelCQL2::Model::RecordInvalid)
     end
 
     it 'should persist model and return self if valid' do
@@ -56,7 +56,7 @@ describe Cequel::Model::Validations do
     it 'should raise error if not valid' do
       post.require_title = true
       expect { post.update_attributes!(:title => nil) }.
-        to raise_error(Cequel::Model::RecordInvalid)
+        to raise_error(CequelCQL2::Model::RecordInvalid)
     end
   end
 
@@ -64,7 +64,7 @@ describe Cequel::Model::Validations do
     it 'should raise RecordInvalid and not persist model if invalid' do
       expect do
         Post.create!(:id => 1, :body => 'Cequel', :require_title => true)
-      end.to raise_error(Cequel::Model::RecordInvalid)
+      end.to raise_error(CequelCQL2::Model::RecordInvalid)
     end
 
     it 'should and return model if valid' do

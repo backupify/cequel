@@ -1,4 +1,4 @@
-module Cequel
+module CequelCQL2
 
   module SpecSupport
 

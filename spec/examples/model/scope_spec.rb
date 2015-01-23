@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Scope do
+describe CequelCQL2::Model::Scope do
   describe '#each' do
     it 'should provide enumerator for query results' do
       connection.stub(:execute).with("SELECT * FROM posts").
@@ -103,7 +103,7 @@ describe Cequel::Model::Scope do
 
     it 'should raise error if attempting count with key restriction' do
       expect { Post.where(:id => [1, 2, 3]).count }.
-        to raise_error(Cequel::Model::InvalidQuery)
+        to raise_error(CequelCQL2::Model::InvalidQuery)
     end
 
     it 'should perform multiple COUNT queries if non-key column selected for multiple values' do
@@ -379,7 +379,7 @@ describe Cequel::Model::Scope do
 
     it 'should fail fast if attempting to select only key column with restrictions on key column' do
       expect { Post.where(:id => 1).select(:id) }.
-        to raise_error(Cequel::Model::InvalidQuery)
+        to raise_error(CequelCQL2::Model::InvalidQuery)
     end
 
     it 'should delegate to enumerator if block given' do
@@ -437,12 +437,12 @@ describe Cequel::Model::Scope do
 
     it 'should fail fast if attempting to select only key column with restrictions on key column' do
       expect { Post.select(:id).where(:id => 1) }.
-        to raise_error(Cequel::Model::InvalidQuery)
+        to raise_error(CequelCQL2::Model::InvalidQuery)
     end
 
     it 'should fail fast if attempting to mix key and non-key columns' do
       expect { Post.where(:id => 1).where(:title => 'Cequel') }.
-        to raise_error(Cequel::Model::InvalidQuery)
+        to raise_error(CequelCQL2::Model::InvalidQuery)
     end
 
     it 'should use index preference if given' do

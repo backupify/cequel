@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Magic do
+describe CequelCQL2::Model::Magic do
   describe '::find_by_*' do
     it 'should magically look up one record by given value' do
       connection.stub(:execute).

@@ -1,4 +1,4 @@
-module Cequel
+module CequelCQL2
 
   module SpecSupport
 
@@ -15,7 +15,7 @@ module Cequel
       end
 
       def cequel
-        @cequel ||= Cequel::Keyspace.new({}).tap do |keyspace|
+        @cequel ||= CequelCQL2::Keyspace.new({}).tap do |keyspace|
           keyspace.connection = connection
         end
       end

@@ -2,7 +2,7 @@ require File.expand_path('../spec_helper', __FILE__)
 require 'stringio'
 require 'logger'
 
-describe Cequel::Keyspace do
+describe CequelCQL2::Keyspace do
   describe '::batch' do
     it 'should send enclosed write statements in bulk' do
       connection.should_receive(:execute).with(<<CQL, [:id, :title], [1, 'Hey'], :body, 'Body')
@@ -47,9 +47,9 @@ CQL
   describe '::connection_pool' do
     it 'should use connection pool if pool specified' do
       #NOTE: called one time per pool entry
-      Cequel::Keyspace.any_instance.should_receive(:build_connection).once.and_return(connection)
-      Cequel::Keyspace.any_instance.should_receive(:connection).never
-      keyspace = Cequel::Keyspace.new(:pool => 1)
+      CequelCQL2::Keyspace.any_instance.should_receive(:build_connection).once.and_return(connection)
+      CequelCQL2::Keyspace.any_instance.should_receive(:connection).never
+      keyspace = CequelCQL2::Keyspace.new(:pool => 1)
 
       keyspace.with_connection { |conn| }
       keyspace.with_connection { |conn| }
@@ -57,8 +57,8 @@ CQL
     end
 
     it 'should not use connection pool if no pool specified' do
-      Cequel::Keyspace.any_instance.should_receive(:connection).exactly(3).times.and_return(connection)
-      keyspace = Cequel::Keyspace.new({})
+      CequelCQL2::Keyspace.any_instance.should_receive(:connection).exactly(3).times.and_return(connection)
+      keyspace = CequelCQL2::Keyspace.new({})
 
       keyspace.with_connection { |conn| }
       keyspace.with_connection { |conn| }

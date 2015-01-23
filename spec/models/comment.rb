@@ -1,5 +1,5 @@
 class Comment
-  include Cequel::Model
+  include CequelCQL2::Model
 
   key :id, :uuid
   column :body, :text

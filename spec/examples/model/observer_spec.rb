@@ -1,9 +1,9 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Observer do
+describe CequelCQL2::Model::Observer do
   before do
-    Cequel::Model.observers = [:post_observer, :asset_observer]
-    Cequel::Model.instantiate_observers
+    CequelCQL2::Model.observers = [:post_observer, :asset_observer]
+    CequelCQL2::Model.instantiate_observers
   end
 
   let(:post) do
