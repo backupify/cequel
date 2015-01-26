@@ -1,4 +1,4 @@
-class CommentCounts < Cequel::Model::Counter
+class CommentCounts < CequelCQL2::Model::Counter
 
   key :blog_id, :int
   columns :uuid

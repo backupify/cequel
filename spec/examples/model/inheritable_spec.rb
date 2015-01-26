@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Inheritable do
+describe CequelCQL2::Model::Inheritable do
   it 'should inherit key from superclass' do
     Photo.key_alias.should == :id
   end
@@ -19,7 +19,7 @@ describe Cequel::Model::Inheritable do
 
   it 'should not allow overriding a class without a type column' do
     base = Class.new do
-      include Cequel::Model
+      include CequelCQL2::Model
       key :id, :integer
     end
     expect { sub = Class.new(base) }.to raise_error(ArgumentError)

@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::DataSet do
+describe CequelCQL2::DataSet do
   describe '#insert' do
     it 'should insert a row' do
       connection.should_receive(:execute).
@@ -318,15 +318,15 @@ describe Cequel::DataSet do
         cequel[:blogs].where(
           :id => cequel[:posts].select(:blog_id).where(:title => 'Blog')
         ).cql
-      end.to raise_error(Cequel::EmptySubquery)
+      end.to raise_error(CequelCQL2::EmptySubquery)
     end
 
   end
 
   describe '#where!' do
     it 'should override chained conditions' do
-      cequel[:posts].where(:title => 'Hey').where!(:title => 'Cequel').cql.
-        should == ["SELECT * FROM posts WHERE ? = ?", :title, 'Cequel']
+      cequel[:posts].where(:title => 'Hey').where!(:title => 'CequelCQL2').cql.
+        should == ["SELECT * FROM posts WHERE ? = ?", :title, 'CequelCQL2']
     end
   end
 

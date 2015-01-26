@@ -1,6 +1,6 @@
 class Blog
 
-  include Cequel::Model
+  include CequelCQL2::Model
   include Timestamps
 
   key :id, :integer

@@ -1,7 +1,7 @@
 class Category
 
-  include Cequel::Model
-  include Cequel::Model::Dynamic
+  include CequelCQL2::Model
+  include CequelCQL2::Model::Dynamic
 
   key :id, :int
   column :name, :text

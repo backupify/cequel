@@ -1,4 +1,4 @@
-class BlogPosts < Cequel::Model::Dictionary
+class BlogPosts < CequelCQL2::Model::Dictionary
   key :blog_id, :int
   maps :uuid => :int
 

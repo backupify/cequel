@@ -1,10 +1,10 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Callbacks do
+describe CequelCQL2::Model::Callbacks do
   let(:post) do
     connection.stub(:execute).
       with("SELECT * FROM posts WHERE ? = ? LIMIT 1", :id, 1).
-      and_return result_stub(:id => 1, :title => 'Cequel')
+      and_return result_stub(:id => 1, :title => 'CequelCQL2')
     Post.find(1)
   end
 

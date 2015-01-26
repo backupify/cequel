@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Timestamps do
+describe CequelCQL2::Model::Timestamps do
   let!(:now) { Time.now }
   before { Time.stub(:now).and_return now }
 

@@ -31,7 +31,7 @@ gem 'cequel'
 For Cequel::Model, instead add:
 
 ``` ruby
-gem 'cequel', :require => 'cequel/model'
+gem 'cequel', :require => 'cequel_cql2/model'
 ```
 
 ### Rails integration ###

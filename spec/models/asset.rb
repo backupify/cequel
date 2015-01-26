@@ -1,6 +1,6 @@
 class Asset
 
-  include Cequel::Model
+  include CequelCQL2::Model
 
   key :id, :integer
   column :class_name, :ascii

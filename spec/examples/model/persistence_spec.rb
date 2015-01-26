@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-describe Cequel::Model::Persistence do
+describe CequelCQL2::Model::Persistence do
   describe '#find' do
     it 'should return hydrated instance' do
       connection.stub(:execute).
@@ -49,7 +49,7 @@ describe Cequel::Model::Persistence do
         with("SELECT * FROM posts WHERE ? = ? LIMIT 1", :id, 2).
         and_return result_stub(:id => 2)
 
-      expect { Post.find(2) }.to raise_error Cequel::Model::RecordNotFound
+      expect { Post.find(2) }.to raise_error CequelCQL2::Model::RecordNotFound
     end
 
     it 'should raise RecordNotFound if row has nil data' do
@@ -57,7 +57,7 @@ describe Cequel::Model::Persistence do
         with("SELECT ? FROM posts WHERE ? = ? LIMIT 1", [:title], :id, 2).
         and_return result_stub(:title => nil)
 
-      expect { Post.select(:title).find(2) }.to raise_error Cequel::Model::RecordNotFound
+      expect { Post.select(:title).find(2) }.to raise_error CequelCQL2::Model::RecordNotFound
     end
 
     it 'should raise RecordNotFound if some rows in multi-row query have no data' do
@@ -68,7 +68,7 @@ describe Cequel::Model::Persistence do
           {:id => 5}
         )
 
-      expect { Post.find(2, 5) }.to raise_error(Cequel::Model::RecordNotFound)
+      expect { Post.find(2, 5) }.to raise_error(CequelCQL2::Model::RecordNotFound)
     end
   end
 
@@ -117,7 +117,7 @@ describe Cequel::Model::Persistence do
       end
 
       it 'should raise MissingKey if no key set' do
-        expect { Post.new.save }.to raise_error(Cequel::Model::MissingKey)
+        expect { Post.new.save }.to raise_error(CequelCQL2::Model::MissingKey)
       end
     end
 
