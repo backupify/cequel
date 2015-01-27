@@ -38,7 +38,7 @@ gem 'cequel', :require => 'cequel_cql2/model'
 
 Cequel and Cequel::Model do not require Rails, but if you are using Rails, you
 will need version 3.2+. Cequel::Model will read from the configuration file
-`config/cequel.yml` if it is present. A simple example configuration would look
+`config/cequel_cql2.yml` if it is present. A simple example configuration would look
 like this:
 
 ``` yaml
