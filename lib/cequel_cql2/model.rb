@@ -83,6 +83,12 @@ module CequelCQL2
       @configuration = configuration
     end
 
+    def self.use_config(configuration)
+      configure(configuration)
+      @keyspace = nil
+      keyspace # reload keyspace
+    end
+
     def self.logger=(logger)
       @logger = logger
     end
