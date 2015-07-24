@@ -45,7 +45,12 @@ module CequelCQL2
         end
 
         def column_family_name=(column_family_name)
+          @column_family_name = column_family_name
           self.column_family = CequelCQL2::Model.keyspace[column_family_name]
+        end
+
+        def reload_configuration
+          self.column_family_name = @column_family_name
         end
 
         def default_batch_size
