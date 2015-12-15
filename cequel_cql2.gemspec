@@ -27,6 +27,8 @@ DESC
   s.add_runtime_dependency 'rails', '~> 4.0'
   s.add_runtime_dependency 'rails-observers'
   s.add_runtime_dependency 'protected_attributes'
+  s.add_runtime_dependency 'exception_helper'
+  s.add_runtime_dependency 'log4r'
   s.add_development_dependency 'rspec', '~> 2.0'
   s.add_development_dependency 'yard', '~> 0.6'
   s.add_development_dependency 'geminabox'

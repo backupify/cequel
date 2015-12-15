@@ -97,6 +97,15 @@ shared_examples 'readable dictionary' do
 
   end
 
+  describe '#each_slice' do
+    it 'should retry if indicated' do
+      connection.should_receive(:execute).exactly(4).times { raise ::CassandraCQL::Thrift::TimedOutException.new('foo') }
+      expect do
+        dictionary.each_slice(2, {:retry_count => 3, :retry_sleep => 1}) {}
+      end.to raise_error(::CassandraCQL::Thrift::TimedOutException)
+    end
+  end
+
   context 'with data loaded in memory' do
     before do
       connection.stub(:execute).

@@ -72,6 +72,7 @@ module CequelCQL2
       end
 
       include Enumerable
+      include ExceptionHelper::Retry
 
       def initialize(key, row = nil)
         @key = key
@@ -134,12 +135,21 @@ module CequelCQL2
         each_pair(&block)
       end
 
-      def each_slice(batch_size)
+      def each_slice(batch_size, options = {})
+        default_options = {:retry_count => 0,
+                           :retry_sleep => 0,
+                           :errors => [::CassandraCQL::Thrift::TimedOutException]}
+
+        opts = default_options.merge(options)
+
         batch_scope = scope.select(:first => batch_size)
         key_alias = self.class.key_alias
         last_key = nil
         begin
-          batch_results = batch_scope.first
+          batch_results = []
+          retry_on_failure(*opts[:errors], :retry_sleep => opts[:retry_sleep], :retry_count => opts[:retry_count]) do
+            batch_results = batch_scope.first
+          end
           batch_results.delete(key_alias)
           result_length = batch_results.length
           batch_results.delete(last_key) unless last_key.nil?
