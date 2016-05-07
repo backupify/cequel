@@ -9,7 +9,7 @@ module CequelCQL2
       config.cequel = CequelCQL2::Model
 
       initializer "cequel.configure_rails" do
-        config_path = Rails.root.join('config/cequel.yml').to_s
+        config_path = Rails.root.join('config/cequel_cql2.yml').to_s
 
         if File.exist?(config_path)
           yaml = YAML::load(ERB.new(IO.read(config_path)).result)[Rails.env]
